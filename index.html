@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kettle &amp; Fern | Small-batch Indian tea</title>
+
+<script>window.dataLayer = window.dataLayer || [];</script>
+
+<!-- STEP A: replace GTM-KD7RCPJK below with your own GTM container ID (appears twice in this file) -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-KD7RCPJK');</script>
+
+<style>
+:root{--bg:#f6f9f7;--ink:#14302f;--muted:#4f6664;--line:#cfdcd7;--leaf:#1f5f4a;--amber:#e8a33d;--mint:#dcefe6}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+h1,h2,h3{font-family:Georgia,"Times New Roman",serif;line-height:1.2;margin:0}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+header{border-bottom:1px solid var(--line);padding:16px 0}
+header .wrap{display:flex;justify-content:space-between;align-items:center}
+.brand{font:700 22px Georgia,serif}
+#cartbar{font-size:15px;color:var(--muted)}
+.hero{padding:56px 0 40px}
+.hero h1{font-size:clamp(32px,6vw,52px);max-width:16ch}
+.hero p{max-width:46ch;color:var(--muted);margin:16px 0 24px}
+button,.btn{font:inherit;border:0;border-radius:6px;padding:10px 18px;cursor:pointer;background:var(--leaf);color:#fff}
+button.alt{background:var(--amber);color:var(--ink);font-weight:600}
+button:focus-visible,input:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+.grid{display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));padding:8px 0 40px}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:20px}
+.card .swatch{height:90px;border-radius:6px;margin-bottom:14px}
+.card h3{font-size:20px;cursor:pointer}
+.card p{color:var(--muted);margin:6px 0 14px}
+.row{display:flex;justify-content:space-between;align-items:center}
+.band{background:var(--mint);padding:36px 0}
+form{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+input[type=email]{flex:1 1 240px;padding:10px 12px;border:1px solid var(--line);border-radius:6px;font:inherit}
+#msg{margin-top:12px;font-weight:600}
+.log{padding:32px 0 56px}
+.log summary{cursor:pointer;font-weight:600}
+#events{font:13px/1.5 ui-monospace,Menlo,Consolas,monospace;background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px;max-height:240px;overflow:auto;margin-top:10px}
+#events div{border-bottom:1px dashed var(--line);padding:4px 0}
+@media (prefers-reduced-motion:no-preference){button{transition:filter .15s}button:hover{filter:brightness(1.1)}}
+</style>
+</head>
+<body>
+<!-- STEP A (second place): replace GTM-XXXXXXX in the id below too -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KD7RCPJK" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+<header><div class="wrap">
+  <div class="brand">Kettle &amp; Fern</div>
+  <div id="cartbar">Cart: 0 items, ₹0</div>
+</div></header>
+
+<main>
+<section class="hero"><div class="wrap">
+  <h1>Tea from three hills, packed the week it is picked.</h1>
+  <p>Small-batch Darjeeling, Assam and Nilgiri teas, shipped across India in 3 to 5 days.</p>
+  <button class="alt" id="hero-cta" data-cta="hero_shop_teas">Shop the teas</button>
+</div></section>
+
+<section class="wrap" id="shop">
+  <h2 style="margin-bottom:20px">This week's teas</h2>
+  <div class="grid" id="grid"></div>
+  <div class="row" style="padding-bottom:40px">
+    <span id="cartnote">Your cart is empty.</span>
+    <span><button id="checkout" disabled>Go to checkout</button> <button class="alt" id="place" hidden>Place order</button></span>
+  </div>
+</section>
+
+<section class="band"><div class="wrap">
+  <h2>Get ₹100 off your first order</h2>
+  <p style="max-width:50ch;color:var(--muted)">Join the tea club for new harvests and one email a month. Unsubscribe any time.</p>
+  <form id="signup">
+    <input type="email" id="email" placeholder="you@example.com" required aria-label="Email address">
+    <button type="submit">Join the club</button>
+  </form>
+  <div id="msg" role="status"></div>
+</div></section>
+
+<section class="wrap log">
+  <details open>
+    <summary>Event log: what this page just sent to dataLayer</summary>
+    <div id="events"></div>
+  </details>
+</section>
+</main>
+
+<script>
+var products=[
+ {id:'T-101',name:'Darjeeling first flush',price:640,category:'black tea',blurb:'Light, floral, 50 g.',color:'#e8c98f'},
+ {id:'T-102',name:'Assam breakfast',price:420,category:'black tea',blurb:'Malty and strong, 100 g.',color:'#b9743f'},
+ {id:'T-103',name:'Nilgiri green',price:520,category:'green tea',blurb:'Grassy and bright, 50 g.',color:'#8fc3a4'}
+];
+var cart=[];
+
+function log(name,payload){
+  var d=document.createElement('div');
+  d.textContent=new Date().toLocaleTimeString()+'  '+name+'  '+JSON.stringify(payload||{});
+  var box=document.getElementById('events');
+  box.insertBefore(d,box.firstChild);
+}
+// Plain events: name plus flat parameters
+function track(name,params){
+  var o={event:name};for(var k in (params||{})){o[k]=params[k];}
+  window.dataLayer.push(o);log(name,params);
+}
+// Ecommerce events: clear the old object first so values do not carry over
+function ecom(name,ecommerce){
+  window.dataLayer.push({ecommerce:null});
+  window.dataLayer.push({event:name,ecommerce:ecommerce});
+  log(name,ecommerce);
+}
+function item(p,qty){return {item_id:p.id,item_name:p.name,item_category:p.category,price:p.price,quantity:qty||1};}
+function total(){return cart.reduce(function(s,p){return s+p.price;},0);}
+
+function render(){
+  var g=document.getElementById('grid');
+  products.forEach(function(p){
+    var c=document.createElement('div');c.className='card';
+    c.innerHTML='<div class="swatch" style="background:'+p.color+'"></div><h3>'+p.name+'</h3><p>'+p.blurb+'</p><div class="row"><strong>₹'+p.price+'</strong><button data-id="'+p.id+'">Add to cart</button></div>';
+    c.querySelector('h3').addEventListener('click',function(){ecom('select_item',{item_list_name:'weekly_teas',items:[item(p)]});});
+    c.querySelector('button').addEventListener('click',function(){
+      cart.push(p);ecom('add_to_cart',{currency:'INR',value:p.price,items:[item(p)]});update();
+    });
+    g.appendChild(c);
+  });
+  ecom('view_item_list',{item_list_name:'weekly_teas',items:products.map(function(p){return item(p);})});
+}
+function update(){
+  document.getElementById('cartbar').textContent='Cart: '+cart.length+' items, ₹'+total();
+  document.getElementById('cartnote').textContent=cart.length?cart.length+' item(s) in your cart.':'Your cart is empty.';
+  document.getElementById('checkout').disabled=!cart.length;
+}
+
+document.getElementById('hero-cta').addEventListener('click',function(){
+  track('cta_click',{cta_id:'hero_shop_teas',cta_location:'hero'});
+  document.getElementById('shop').scrollIntoView({behavior:'smooth'});
+});
+document.getElementById('checkout').addEventListener('click',function(){
+  ecom('begin_checkout',{currency:'INR',value:total(),items:cart.map(function(p){return item(p);})});
+  document.getElementById('place').hidden=false;
+});
+document.getElementById('place').addEventListener('click',function(){
+  ecom('purchase',{transaction_id:'T'+Date.now(),currency:'INR',value:total(),items:cart.map(function(p){return item(p);})});
+  cart=[];update();this.hidden=true;
+  document.getElementById('cartnote').textContent='Thank you. This is a demo store, so no order was placed.';
+});
+document.getElementById('signup').addEventListener('submit',function(e){
+  e.preventDefault();
+  // Never put the email address in dataLayer: personal data should not go into analytics tags.
+  track('sign_up',{method:'email',signup_location:'tea_club_band'});
+  document.getElementById('msg').textContent='You are on the list.';
+  this.reset();
+});
+render();
+</script>
+</body>
+</html>
